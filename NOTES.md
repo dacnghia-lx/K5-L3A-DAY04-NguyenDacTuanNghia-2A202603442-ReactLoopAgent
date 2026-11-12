@@ -1,6 +1,6 @@
 # Ghi chú phân tích · Day 04
 
-Họ và tên: Nguyen Dac Tuan Nghia
+Họ và tên: Nguyễn Đắc Tuấn Nghĩa
 MSSV: 2A202603442
 
 Cấu hình cả hai lần chạy (khối `config` giống hệt nhau): provider `openai`, agent model `gpt-5.4-mini`, judge `openai/gpt-5.4-mini`, `max_steps=8`, dataset `core`, snapshot cố định.
@@ -49,7 +49,7 @@ Ngoài ra, ở before có **7/22 case** agent đã đọc incident thành công 
 
 - **Sửa gì, ở đâu** (`agent.py`):
   1. `SYSTEM_PROMPT`: thêm 3 quy tắc bắt buộc — (a) user đưa incident ID thì phải gọi `get_incident_details` với ID đó, không tự tạo link; (b) tool một provider lỗi/timeout thì báo không kiểm tra được và không nêu trạng thái provider đó, kể cả khi user yêu cầu; (c) đã đọc incident thì kèm URL từ trường `url`.
-  2. Kiểm tra nguồn (Bài 4) trong `run_agent`: lưu `url` từ mỗi `get_incident_details` có `ok: true`; nếu final answer không chứa URL nào thì ghi event `validation_missing_source`, thêm user message yêu cầu sửa và gọi model tiếp trong `max_steps`. Hết lượt thì trả `max_steps`. Có công tắc `AGENT_SOURCE_VALIDATION` (mặc định bật) chỉ để chạy bản before.
+  2. Kiểm tra nguồn trong `run_agent`: lưu `url` từ mỗi `get_incident_details` có `ok: true`; nếu final answer không chứa URL nào thì ghi event `validation_missing_source`, thêm user message yêu cầu sửa và gọi model tiếp trong `max_steps`. Hết lượt thì trả `max_steps`. Có công tắc `AGENT_SOURCE_VALIDATION` (mặc định bật) chỉ để chạy bản before.
 - **Vì sao chọn thay đổi này:** H7 và H3 là hai case điểm thấp nhất, có cùng gốc rễ ở prompt (đi theo tiền đề/yêu cầu của user thay vì bằng chứng tool) nên sửa prompt là thay đổi nhỏ nhất đúng nguyên nhân. Kiểm tra nguồn là yêu cầu của bài và giải quyết 7 case thiếu URL; nó là lưới an toàn bằng code, không phụ thuộc model có nghe prompt hay không.
 
 ## 4. So sánh hai lần chạy
